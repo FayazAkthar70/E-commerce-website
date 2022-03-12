@@ -1,20 +1,43 @@
 from flask import Flask, render_template
+import psycopg2
 
-app = Flask(__name__)
-app.debug = True
-
-@app.route("/")
-@app.route("/home")
-def get_home():
+def create_app():
+    app = Flask(__name__)
+    app.config.from_pyfile('settings.py')
     
+    while True:
+        try:
+            conn = psycopg2.connect(host= app.config.get("DATABASE_HOSTNAME") , database = app.config.get("DATABASE_NAME"), user = app.config.get("DATABASE_USERNAME") , password = app.config.get("DATABASE_PASSWORD"))
+            cur = conn.cursor()
+            print("database connection successfull")
+            break
+        except Exception as error:
+            print  ("error" , error)
+            time.sleep(2)
+            
+    
+    
+    cur.execute("""CREATE TABLE IF NOT EXISTS items ( 
+        id serial primary key not null,
+        name varchar(30) not null,
+        price int ,
+        barcode char(30) not null unique,
+        description text);
+    """)
+    conn.commit()
+    print("table created successfully")
 
-    return render_template('home.html')
+    @app.route("/")
+    @app.route("/home")
+    def get_home():
+        
 
-@app.route("/market")
-def get_market():
-    items = [
-        {'id': 1, 'name': 'Phone', 'barcode': '893212299897', 'price': 500},
-    {'id': 2, 'name': 'Laptop', 'barcode': '123985473165', 'price': 900},
-    {'id': 3, 'name': 'Keyboard', 'barcode': '231985128446', 'price': 150}
-]
-    return render_template('market.html', items=items)
+        return render_template('home.html')
+
+    @app.route("/market")
+    def get_market():
+        cur.execute("""select * from items""")
+        items = cur.fetchall()
+        print(items[0])
+        return render_template('market.html', items=items)
+    return app

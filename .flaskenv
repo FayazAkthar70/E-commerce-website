@@ -1,0 +1,3 @@
+FLASK_APP=market
+FLASK_ENV=development
+FLASK_RUN_PORT=8080

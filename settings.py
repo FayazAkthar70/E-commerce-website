@@ -1,0 +1,7 @@
+from os import environ
+
+DATABASE_HOSTNAME = environ.get('DATABASE_HOSTNAME')
+DATABASE_PORT = environ.get('DATABASE_PORT')
+DATABASE_NAME = environ.get('DATABASE_NAME')
+DATABASE_PASSWORD = environ.get('DATABASE_PASSWORD')
+DATABASE_USERNAME = environ.get('DATABASE_USERNAME')
