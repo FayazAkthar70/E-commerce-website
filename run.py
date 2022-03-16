@@ -1,5 +1,5 @@
-from .market import create_app
+from market import app
+from dotenv import load_dotenv
 
-app = create_app()
 
-gunicorn run:app
+app.run()
