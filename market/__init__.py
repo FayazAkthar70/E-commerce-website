@@ -14,4 +14,5 @@ while True:
         print  ("error" , error)
         time.sleep(2)
 
+from market import create_tables
 from market import routes
